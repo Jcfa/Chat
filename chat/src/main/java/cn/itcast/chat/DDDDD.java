@@ -1,6 +1,7 @@
 package cn.itcast.chat;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,8 +21,10 @@ public class DDDDD extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         TextView textView = new TextView(getActivity());
-        Intent intent = getActivity().getIntent();
-        String key = intent.getStringExtra("key");
+        textView.setTextColor(Color.BLACK);
+      //  Intent intent = getActivity().getIntent();
+        //String key = intent.getStringExtra("key");
+        String key = getArguments().getString("news");
         textView.setText(key);
         return textView;
     }

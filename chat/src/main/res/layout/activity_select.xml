@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.app.FragmentTabHost
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-   android:id="@+id/TabHost"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<TextView
-    android:id="@+id/tv_host"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="111111111111111111111"/>
+    <!--内容片段的容器-->
+    <FrameLayout
+        android:id="@+id/flt_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+    </FrameLayout>
+    <!--片段标签的容器-->
+    <android.support.v4.app.FragmentTabHost
+        android:id="@+id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</android.support.v4.app.FragmentTabHost>
+    </android.support.v4.app.FragmentTabHost>
+</LinearLayout>

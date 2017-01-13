@@ -1,6 +1,7 @@
 package cn.itcast.chat;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTabHost;
@@ -12,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -34,34 +34,41 @@ public class SelectTitleActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
+        mTabHost = (FragmentTabHost) findViewById(R.id.tabhost);
        // TextView textView = new TextView(this);
-        //init();
-        //init1();
-        init2();
+         //init();
+        mTabHost.setup(getApplicationContext(),getSupportFragmentManager(),R.id.flt_content);
+        init1();
+     // init2();
     }
 
     private void init2() {
         MainTab[] values = MainTab.values();
         for (int i = 0; i< values.length; i++){
             MainTab mainTab = values[i];
-            String title = mainTab.getTitle();
             TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mainTab.getTag());
-            tabSpec.setIndicator(title);
+            tabSpec.setIndicator(mainTab.getTitle());
             Bundle bundle = new Bundle();
-            bundle.putString("key",mainTab.getTitle());
+            bundle.putString("news",mainTab.getTitle());
             mTabHost.addTab(tabSpec,mainTab.getClz(),bundle);
         }
     }
 
     private void init1() {
-        mTabHost = (FragmentTabHost) findViewById(R.id.TabHost);
+        mTabHost = (FragmentTabHost) findViewById(R.id.tabhost);
 
-        mTabHost.setup(getApplicationContext(),getSupportFragmentManager(),R.id.tv_host);
+        mTabHost.setup(getApplicationContext(),getSupportFragmentManager(),R.id.flt_content);
         TabHost.TabSpec  tabSpec = mTabHost.newTabSpec("news");
         tabSpec.setIndicator("综合");//设置视图
         Bundle bundle = new Bundle();
-        bundle.putString("key","我的综合");
+        bundle.putString("news","我的综合");
         mTabHost.addTab(tabSpec,DDDDD.class,bundle);
+        mTabHost.getTabWidget().setStripEnabled(true);
+        TabHost.TabSpec  tabSpec1 = mTabHost.newTabSpec("Title");
+        tabSpec1.setIndicator("发现");//设置视图
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("news","发现新大陆");
+        mTabHost.addTab(tabSpec1,DDDDD.class,bundle1);
     }
 
     private void init() {
