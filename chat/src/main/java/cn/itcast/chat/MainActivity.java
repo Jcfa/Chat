@@ -2,6 +2,7 @@ package cn.itcast.chat;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -22,106 +23,50 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    private int srceenHeight;
-    private int srceenWidth;
-    private ViewPager mViewPager;
-    private PagerAdapter mMAdapter;
-    private List<View> mViews;
-    private PagerTabStrip mTabStrip;
-    private List<String> mTitle1;
+import cn.bingoogolapple.qrcode.core.QRCodeView;
+import cn.bingoogolapple.qrcode.zxing.ZXingView;
+
+public class MainActivity extends AppCompatActivity implements QRCodeView.Delegate {
+    private static final String TAG = "tag";
+    private QRCodeView mQRCodeView;
+    private Object IntentKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-       // init1();
+        mQRCodeView = (ZXingView) findViewById(R.id.zxingview);
+        mQRCodeView.startSpot();
+        mQRCodeView.setResultHandler(this);
+        mQRCodeView.startSpot();//
+        mQRCodeView.startCamera();//
+        mQRCodeView.startSpotAndShowRect();//
 
     }
-    public void onClick(View view){
+  /*  public void onClick(View view){
         Intent intent = new Intent(this,SelectTitleActivity.class);
         startActivity(intent);
     }
-
-    private void init1() {
-        // init();
-        //mViewPager = (ViewPager) findViewById(R.id.viewPager);
-       // mTabStrip = (PagerTabStrip) findViewById(R.id.viewPager_strip);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("你好了");
-
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.actionbar_back_icon_normal);
-        mViews = new ArrayList<>();
-        //  View inflate = getLayoutInflater().inflate(R.layout.layou1, null);
-        View view1 = getLayoutInflater().inflate(R.layout.layou1, null);
-        //  View view2 = getLayoutInflater().inflate(R.layout.layou2, null);
-        View view2 = LayoutInflater.from(this).inflate(R.layout.layou2, null);
-        mTabStrip.setDrawFullUnderline(false);
-        mTabStrip.getTabIndicatorColor();
-        mTabStrip.setTabIndicatorColor(Color.YELLOW);
-        mTabStrip.setTextSpacing(200);
-        mTabStrip.animate().scaleX(0.5f).scaleY(0.5f);
-        mViews.add(view1);
-        mViews.add(view2);
-        mTitle1 = new ArrayList<>();
-        mTitle1.add("吕成欢");
-        mTitle1.add("常碧发");
+*/
 
 
-        PagerAdapter mMAdapter  =  new PagerAdapter() {
+    @Override//成功的方法
+    public void onScanQRCodeSuccess(String result) {
+        if (result.contains("csdn.net")) {
+             //startWebViewForResult(result, true, "", IntentKey.BACK);
+            vibrate();
+        }
+        mQRCodeView.startCamera();
+        mQRCodeView.startSpot();
 
-            @Override
-            public int getCount() {
-                return mViews.size();
-            }
-
-            @Override
-            public Object instantiateItem(ViewGroup container, int position) {
-                container.addView(mViews.get(position));
-                return mViews.get(position);
-            }
-
-            @Override
-            public boolean isViewFromObject(View view, Object object) {
-                return view==object;
-            }
-
-            @Override
-            public void destroyItem(ViewGroup container,
-                                    int position, Object object) {
-                super.destroyItem(container, position, object);
-                container.removeView((View) object);
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return mTitle1.get(position);
-            }
-        };
-        mViewPager.setAdapter(mMAdapter);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
+    //设置二维码
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        vibrator.vibrate(200);
     }
-
-    private void init() {
-       // TextView textView = (TextView) findViewById(R.id.tv);
-        //找到父控件
-        DisplayMetrics metrics = new DisplayMetrics();
-        //设置当前屏幕的宽高像素
-        getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-        //获取屏幕宽高
-        srceenWidth =  metrics.widthPixels;
-        srceenHeight =  metrics.heightPixels;
-        Log.d("cbf","srceenWidth="+srceenWidth+"srceenHeight="+srceenHeight);
-        RelativeLayout.LayoutParams params = new
-                RelativeLayout.LayoutParams(srceenWidth,srceenHeight);
-        //textView.setLayoutParams(params);
+    @Override//失败的方法
+    public void onScanQRCodeOpenCameraError() {
+        Log.e(TAG, "打开相机出错");
     }
-
 }
